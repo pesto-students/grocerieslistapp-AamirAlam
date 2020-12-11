@@ -8,6 +8,8 @@ const todoList = document.querySelector('.todo-list');
 
 todoAddButton.addEventListener('click', addGrocry )
 
+todoList.addEventListener('click', deleteCheck);
+
 // functions
 
 function addGrocry(event){
@@ -18,7 +20,7 @@ function addGrocry(event){
     todoDiv.classList.add('todo');
 
     const newTodo = document.createElement('li');
-    newTodo.innerText = "lol";
+    newTodo.innerText = todoInput.value;
     newTodo.classList.add('todo-item')
 
     todoDiv.appendChild(newTodo);
@@ -37,8 +39,22 @@ function addGrocry(event){
     todoList.appendChild(todoDiv)
     console.log('adding new item')
 
+    //clear todo input value
+    todoInput.value = ""
+
 }
 
-function deleteGrocery(event) {
-    console.log('delete item')
+function deleteCheck(e) {
+
+    const item = e.target;
+
+    if (item.classList[0] == "delete-button") {
+        const todo = item.parentElement;
+        todo.classList.add("fall")
+        todo.remove()
+    }else if (item.classList[0] == "edit-button") {
+        
+    }
+
 }
+
