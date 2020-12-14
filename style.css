@@ -4,11 +4,12 @@
     box-sizing: border-box;
 }
 body {
- background-color: #607D8B;
+ background-image: url('./public/img/back.jpg');
 }
 
 header {
     font-size: 1.5rem;
+    color: orange;
 }
 
 header,
@@ -20,12 +21,16 @@ form {
 }
 
 form input,
-form button {  
+form button, .edit-input {  
     padding: 0.5rem;
     font-size: 2rem;
     border: none;
     background-color: white;
 
+}
+
+form button {
+    color: orange;
 }
 
 form button {
@@ -35,18 +40,18 @@ form button {
 }
 
 
-.todo-container {
+.grocery-container {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.todo-list{
+.grocery-list{
     min-width: 30%;
     list-style: none;
 }
 
-.todo {
+.grocery {
     margin: 0.5rem;
     background: white;
     color: black;
@@ -57,7 +62,7 @@ form button {
     transition: all 0.5s ease;
 }
 
-.todo li {
+.grocery li {
     flex: 1;
 }
 
@@ -76,7 +81,7 @@ form button {
     color: white;
 }
 
-.todo-item {
+.grocery-item {
     padding: 0rem 0.5rem;
 }
 
