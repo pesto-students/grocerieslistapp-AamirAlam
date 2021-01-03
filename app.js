@@ -45,12 +45,12 @@ function addGrocry(event){
 
 }
 
-function validateGroceryInput(name) {
+function validateGroceryInput(name, action='add') {
     console.log(grocery_items.map(item => item.name).indexOf(name))
     if (!name) {
         return {status: false, message: "Invalid grocery name"}
     }
-    else if (grocery_items.length  >= max_bucket_items){
+    else if (action === 'add' && grocery_items.length  >= max_bucket_items){
        return  {status: false, message: "Shopping bucket full! \nOnly a max of 5 items can be added"};
     }
     else if (grocery_items.map(item => item.name).indexOf(name) >= 0){
@@ -122,6 +122,12 @@ function saveEditedItem(event) {
     const item_id = item.parentElement.parentElement.getAttribute('data-key');
     const name = item.parentElement.parentElement.querySelector('input').value;
 
+    const validation_res = validateGroceryInput(name, 'edit');
+
+    if (!validation_res.status){
+        return alert(validation_res.message)
+    }
+
     const updatedItemDiv = generateGroceryListElement(item_id, name);
 
     item.parentElement.parentElement.replaceWith(updatedItemDiv)
@@ -131,7 +137,11 @@ function saveEditedItem(event) {
 function deleteItem(event){
     console.log('delete item')
     const item = event.target;
-    console.log(item.id)
+
+    const item_id = item.parentElement.getAttribute('data-key');
+    console.log(item_id)
+    grocery_items = grocery_items.filter(item => item.id != item_id)
+    console.log(grocery_items)
     const grocery = item.parentElement;
     grocery.classList.add("fall")
     grocery.remove()
