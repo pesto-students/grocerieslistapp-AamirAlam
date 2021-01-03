@@ -16,20 +16,60 @@ groceryAddButton.addEventListener('click', addGrocry )
 
 // functions
 
+const max_bucket_items = 5;
+let current_bucket_items = 0;
+let grocery_items = [];
+
 function addGrocry(event){
 
     event.preventDefault();
     
-    if (!groceryInput.value) {
-        return
+    const validation_res = validateGroceryInput(groceryInput.value);
+
+    if (!validation_res.status){
+        return alert(validation_res.message)
     }
 
+    const grocery_item = {
+        id: Date.now(),
+        name: groceryInput.value
+    }
+
+    groceryList.appendChild(generateGroceryListElement(grocery_item.id, grocery_item.name))
+    
+    grocery_items.push(grocery_item)
+    console.log('adding new item', grocery_items)
+
+    //clear grocery input value
+    groceryInput.value = ""
+
+}
+
+function validateGroceryInput(name) {
+    console.log(grocery_items.map(item => item.name).indexOf(name))
+    if (!name) {
+        return {status: false, message: "Invalid grocery name"}
+    }
+    else if (grocery_items.length  >= max_bucket_items){
+       return  {status: false, message: "Shopping bucket full! \nOnly a max of 5 items can be added"};
+    }
+    else if (grocery_items.map(item => item.name).indexOf(name) >= 0){
+        return {status: false, message: "Item already present in the bucket!"};
+    }else{
+        return {status: true, message: ""};
+    }
+}
+
+function generateGroceryListElement(id, value) {
     const groceryDiv = document.createElement('div');
-    groceryDiv.classList.add('grocery');
+    groceryDiv.setAttribute('class', 'grocery');
+    groceryDiv.setAttribute('data-key', id)
 
     const newgrocery = document.createElement('li');
-    newgrocery.innerText = groceryInput.value;
-    newgrocery.classList.add('grocery-item')
+    newgrocery.innerText = value;
+    newgrocery.setAttribute('class', 'grocery_item');
+    
+   
 
     groceryDiv.appendChild(newgrocery);
 
@@ -43,61 +83,49 @@ function addGrocry(event){
     deleteButton.innerHTML = '<i class="fas fa-trash delete-button" ></i>';
     deleteButton.addEventListener('click', deleteItem)
     groceryDiv.appendChild(deleteButton)
-
-    groceryList.appendChild(groceryDiv)
-    console.log('adding new item')
-
-    //clear grocery input value
-    groceryInput.value = ""
-
+    return groceryDiv;
 }
 
-function editItem(event) {
-    const item = event.target;
-    console.log(item)
-    const groceryDiv = document.createElement('div');
-    groceryDiv.classList.add('grocery');
+function generateEditListItem(id, name) {
+    const editGroceryDiv = document.createElement('div');
+    editGroceryDiv.setAttribute('class', 'grocery');
+    editGroceryDiv.setAttribute('data-key', id)
 
     const newGrocery = document.createElement('input');
-    newGrocery.value =  item.parentElement.innerText;
+    newGrocery.value =  name;
     newGrocery.classList.add('edit-input')
-    newGrocery.focus()
-    groceryDiv.appendChild(newGrocery);
+    editGroceryDiv.appendChild(newGrocery);
 
 
     const saveBtn = document.createElement('button');
     saveBtn.innerHTML = '<i class="fas fa-check save-button" ></i>';
-    groceryDiv.appendChild(saveBtn)
+    saveBtn.addEventListener('click', saveEditedItem)
+    editGroceryDiv.appendChild(saveBtn)
 
-    saveBtn.addEventListener('click', function() {
+    return editGroceryDiv;
+}
 
+function editItem(event) {
+    const item = event.target;
 
-        const groceryLi = document.createElement('li');
-        groceryLi.innerText =newGrocery.value;
-        groceryLi.classList.add('grocery-item')
+    const item_id = item.parentElement.getAttribute('data-key');
+    const name = item.parentElement.innerText;
 
-        // groceryDiv.parentElement.removeChild(groceryDiv);
-
-        const EditedgroceryDiv = document.createElement('div');
-        EditedgroceryDiv.classList.add('grocery');
-
-        EditedgroceryDiv.appendChild(groceryLi);
-
-        const editButton = document.createElement('button');
-        editButton.innerHTML = '<i class="fas fa-edit edit-button" ></i>';
-        editButton.addEventListener('click', editItem)
-        EditedgroceryDiv.appendChild(editButton)
+    const editableItem = generateEditListItem(item_id, name);
+    item.parentElement.replaceWith(editableItem)
     
-    
-        const deleteButton = document.createElement('button');
-        deleteButton.innerHTML = '<i class="fas fa-trash delete-button" ></i>';
-        deleteButton.addEventListener('click', deleteItem)
-        EditedgroceryDiv.appendChild(deleteButton)
+}
 
-        groceryDiv.replaceWith(EditedgroceryDiv)
-    } )
-    
-    item.parentElement.replaceWith(groceryDiv)
+function saveEditedItem(event) {
+    const item = event.target;
+
+    const item_id = item.parentElement.parentElement.getAttribute('data-key');
+    const name = item.parentElement.parentElement.querySelector('input').value;
+
+    const updatedItemDiv = generateGroceryListElement(item_id, name);
+
+    item.parentElement.parentElement.replaceWith(updatedItemDiv)
+
 }
 
 function deleteItem(event){

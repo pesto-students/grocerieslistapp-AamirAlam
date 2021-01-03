@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 body {
- background-image: url('./public/img/back.jpg');
+ /* background-image: url('./public/img/back.jpg'); */
 }
 
 header {
@@ -53,7 +53,7 @@ form button {
 
 .grocery {
     margin: 0.5rem;
-    background: white;
+    background: rgba(206, 206, 206, 0.979);
     color: black;
     font-size: 1.5rem;
     display: flex;
@@ -67,8 +67,8 @@ form button {
 }
 
 .edit-button, .delete-button {  
-     background-color: rgb(73, 204, 73);
-     color:  white;
+     background-color: (206, 206, 206, 0.979);
+     color:  rgb(73, 204, 73);
      border: none;
      padding: 1rem;
      cursor: pointer;
@@ -76,8 +76,8 @@ form button {
     
 } 
 .save-button{  
-    background-color: rgb(73, 204, 73);
-    color:  white;
+    background-color: (206, 206, 206, 0.979);
+    color:  rgb(73, 204, 73);
     border: none;
     padding: 1rem;
     cursor: pointer;
@@ -85,8 +85,8 @@ form button {
    
 } 
 .delete-button {
-    background:#ff6f47;
-    color: white;
+    /* background:#ff6f47; */
+    color: #ff6f47;;
 }
 
 .grocery-item {
